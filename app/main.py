@@ -20,7 +20,7 @@ def create_job(job: Job):
 
 # This grabs everything in the jobs list and returns it to the webpage
 @app.get("/jobs")
-def get_jobs(jobs: str):
+def get_jobs():
     return jobs
 
 # This grabs the job by job_id
