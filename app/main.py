@@ -1,5 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from app.schemas import Job
+
 
 app = FastAPI()
 
@@ -35,7 +36,7 @@ def delete_job(job_id: int):
         if job["id"] == job_id:
             jobs.pop(index)
             return jobs
-    return {"error": "Job not found"}
+    raise HTTPException(status_code=404, detail="Job not found")
 
 # This is for replacing job info by job_id
 @app.put("/jobs/{job_id}")
@@ -48,7 +49,7 @@ def update_job(job_id: int, job: Job):
             job[index] = updated_job
             return updated_job
     
-    return {"error": "Job not found"}
+    raise HTTPException(status_code=404, detail="Job not found")
 
 
 #call helper
