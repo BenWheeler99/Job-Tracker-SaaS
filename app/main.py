@@ -1,29 +1,8 @@
 from fastapi import FastAPI, HTTPException
 from app.schemas import Job
-from sqlalchemy import create_engine, text 
-import os
-from dotenv import load_dotenv
 
-load_dotenv()
 
-# This is the SQLAlchemy create engine command that will use a sqlite data schema
-# and store the info in memory. Echo prompts the terminal/logger to confirm commands as ran
-
-DB_HOST = os.getenv("DB_HOST", "localhost")
-DB_PORT = os.getenv("DB_PORT", "5432")
-DB_NAME = os.getenv("DB_NAME")
-DB_USER = os.getenv("DB_USER")
-DB_PASSWORD = os.getenv("DB_PASSWORD")
-
-DATABASE_URL = f"postgresql+psycopg2://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-engine = create_engine(DATABASE_URL)
-
-with engine.connect() as conn:
-    result = conn.execute(text("SELECT 'Connection Successful'"))
-    print(result.fetchone())
-
-#engine = create_engine("sqlite+pysqlite:///:memory:", echo=True)
-
+#triggering FASTAPI
 app = FastAPI()
 
 jobs = []
@@ -75,32 +54,3 @@ def update_job(job_id: int, job: Job):
     raise HTTPException(status_code=404, detail="Job not found")
 
 
-#SQL Engine Section 
-#This creates an engine object and the engine object creates a database and a table
-#Then we execute a command that INSERTs data into the table and commits it
-#Committing allows us to build a database that can go on to accept more transactions
-#This runs everytime we start the application and only saves the data in memory.
-
-
-'''
-with engine.connect() as conn:
-    result = conn.execute(text("CREATE TABLE some_table (x int, y int)"))
-    conn.execute(
-        text("INSERT INTO some_table (x, y) VALUES (:x, :y)"),
-        [{"x": 1, "y": 1}, {"x": 2, "y": 4}],
-        )
-    conn.commit()
-
-# using engine.begin will auto commit if the query passes
-with engine.begin() as conn:
-    conn.execute(
-        text("INSERT INTO some_table (x, y) VALUES (:x, :y)"),
-        [{"x": 6, "y": 8}, {"x": 9, "y": 10}],
-    )
-
-# This statement just selects data from the database and prints it
-with engine.connect() as conn:
-    result = conn.execute(text("SELECT x, y FROM some_table"))
-    for row in result:
-        print(f"x: {row.x}  y: {row.y}")
-'''
