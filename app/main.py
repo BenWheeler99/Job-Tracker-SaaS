@@ -1,5 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from app.schemas import Job
+from app.database import engine, Base
+from app import models
 
 
 #triggering FASTAPI
@@ -7,6 +9,12 @@ app = FastAPI()
 
 jobs = []
 job_id_counter = 1
+
+
+@app.on_event("startup")
+def on_startup():
+    # Importing models before create_all ensures metadata has table definitions.
+    Base.metadata.create_all(bind=engine)
 
 # This creates a job in the jobs list. uses the schemas model from schemas.py
 # also assigns a unique id to each job for indexing latter 
