@@ -1,14 +1,13 @@
-from fastapi import FastAPI, HTTPException
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+from fastapi import FastAPI, Depends
 from app.schemas import Job
-from app.database import engine, Base
-from app import models
+from app.database import engine, Base, get_session
+from app.models import Job_schema
 
 
 #triggering FASTAPI
 app = FastAPI()
-
-jobs = []
-job_id_counter = 1
 
 
 @app.on_event("startup")
@@ -19,19 +18,21 @@ def on_startup():
 # This creates a job in the jobs list. uses the schemas model from schemas.py
 # also assigns a unique id to each job for indexing latter 
 @app.post("/job/")
-def create_job(job: Job):
-    global job_id_counter
-    job_data = job.model_dump()
-    job_data["id"] = job_id_counter
-    jobs.append(job_data)
-    job_id_counter += 1
-    return job_data
+def create_job(job: Job, db: Session = Depends(get_session)):
+    job_data = job.model_dump(exclude={"id"})
+    db_job = Job_schema(**job_data)
+    db.add(db_job)
+    db.commit()
+    db.refresh(db_job)
+    return db_job
+
 
 # This grabs everything in the jobs list and returns it to the webpage
 @app.get("/jobs")
-def get_jobs():
-    return jobs
-
+def get_jobs(db: Session = Depends(get_session)):
+    result = db.execute(select(Job_schema))
+    return result.scalars().all()
+'''
 # This grabs the job by job_id
 @app.get("/jobs/{job_id}")
 def get_job_by_id(job_id: int):
@@ -59,6 +60,7 @@ def update_job(job_id: int, job: Job):
             jobs[index] = updated_job
             return updated_job
     
-    raise HTTPException(status_code=404, detail="Job not found")
+    raise HTTPException(status_code=404, detail="Job not found")'''
+
 
 
