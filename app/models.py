@@ -10,6 +10,8 @@ class Job_schema(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
-    company: Mapped[str] = mapped_column(String(30))
+    company: Mapped[str] = mapped_column(String(30), nullable=True)
     state: Mapped[Optional[str]]
     offer: Mapped[bool] = mapped_column(Boolean, default=True)
+    
+    
