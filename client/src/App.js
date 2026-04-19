@@ -19,6 +19,8 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+      <h1>Welcome to the Job Tracker SaaS-currently in development</h1>
+      <h2>Feel free to email benjaminwbusiness@gmail.com with advice or criticism</h2>
       <Card title="Card Title 1" description="This is the description for card 1." />
       <Card title="Card Title 2" description="This is the description for card 2." />
       <Card title="Card Title 3" description="This is the description for card 3." />
