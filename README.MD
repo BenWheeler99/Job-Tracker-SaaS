@@ -2,14 +2,17 @@
 
 A FastAPI application to track job applications with PostgreSQL backend.
 
+This project is currently under active development. A React frontend will be implemented soon.
+
 ## Project Status
 
-**Current Phase:** FastAPI + SQLAlchemy + PostgreSQL integration working
+**Current Phase:** Backend foundation complete, frontend integration in progress
 
 - ✅ Database-backed CRUD endpoints are implemented
 - ✅ Session dependency (`get_session`) is wired into routes
 - ✅ Table auto-creation on startup via `Base.metadata.create_all(bind=engine)`
 - ✅ `.env`-driven PostgreSQL configuration
+- 🚧 React frontend implementation coming soon
 
 ## Requirements
 
