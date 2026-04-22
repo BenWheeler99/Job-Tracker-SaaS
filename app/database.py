@@ -1,3 +1,5 @@
+#SqlAlchemy setup for database connection and session management. 
+
 import os
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
@@ -24,7 +26,6 @@ class Base(DeclarativeBase):
 
 # This is for creating a session to interact with the database.
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
 
 def get_session():
     db = SessionLocal()

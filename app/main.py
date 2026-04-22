@@ -1,3 +1,7 @@
+# This file contains the main application logic for a FastAPI-based job tracking application. 
+# It defines the API endpoints for creating, retrieving, updating, and deleting job records. 
+# The application uses SQLAlchemy for database interactions and Pydantic for data validation.
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from fastapi import FastAPI, Depends, HTTPException
@@ -5,10 +9,8 @@ from app.schemas import Job
 from app.database import engine, Base, get_session
 from app.models import Job_schema
 
-
 #triggering FASTAPI
 app = FastAPI()
-
 
 @app.on_event("startup")
 def on_startup():
@@ -40,7 +42,8 @@ def get_jobs(db: Session = Depends(get_session)):
 @app.get("/jobs/{job_id}")
 def get_job_by_id(job_id: int, db: Session = Depends(get_session)):
     # This line is using SQLAlchemy's select function to query the Job_schema table for a record 
-    # where the id matches the provided job_id. The result is then processed to return a single record or None if no match is found.
+    # where the id matches the provided job_id. 
+    # The result is then processed to return a single record or None if no match is found.
     result = db.execute(select(Job_schema).where(Job_schema.id == job_id))
     if not result:
         raise HTTPException(status_code=404, detail="Job not found")
