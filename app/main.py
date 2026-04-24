@@ -5,12 +5,21 @@
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from app.schemas import Job
 from app.database import engine, Base, get_session
 from app.models import Job_schema
 
 #triggering FASTAPI
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.on_event("startup")
 def on_startup():
