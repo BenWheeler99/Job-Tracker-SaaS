@@ -57,50 +57,27 @@ npm install
 cd ..
 ```
 
-## Run The App (Backend + Frontend)
+## Run The App
 
-Run both servers at the same time.
+For local development and demos, run both from your terminal:
 
-1. Start backend (terminal 1, project root):
+**Terminal 1 (Backend)** — project root:
 
 ```bash
 source .venv/bin/activate
 uvicorn app.main:app --port 8001 --reload
 ```
 
-2. Start frontend (terminal 2):
+**Terminal 2 (Frontend)**:
 
 ```bash
 cd client
 npm start
 ```
 
-3. Open the frontend:
+Then open: **http://localhost:3000**
 
-- http://localhost:3000
-
-4. Backend API/docs:
-
-- API base URL: http://127.0.0.1:8001
-- Swagger docs: http://127.0.0.1:8001/docs
-- ReDoc: http://127.0.0.1:8001/redoc
-
-## Frontend Configuration
-
-The frontend uses this environment variable:
-
-- `REACT_APP_API_BASE_URL` (optional)
-
-Default value (if not set):
-
-- `http://127.0.0.1:8001`
-
-Example:
-
-```bash
-cd client
-REACT_APP_API_BASE_URL=http://127.0.0.1:8001 npm start
-```
+Backend API docs: **http://127.0.0.1:8001/docs**
 
 ## Data Model
 
@@ -155,9 +132,9 @@ curl -X DELETE "http://127.0.0.1:8001/jobs/1"
 ## Troubleshooting
 
 - Frontend says "Failed to fetch":
-  - Backend is not running on port 8001.
-  - Start `uvicorn app.main:app --port 8001 --reload` and retry.
-- Port in use:
-  - Stop old process or run backend on a different port and update `REACT_APP_API_BASE_URL`.
-- PostgreSQL role/database issues:
-  - Verify `.env` values match your local PostgreSQL setup.
+  - Ensure backend is running on port 8001.
+  - Check that both servers started without error.
+- Port already in use:
+  - Stop old processes or use different ports.
+- PostgreSQL connection fails:
+  - Verify `.env` matches your local PostgreSQL setup.
