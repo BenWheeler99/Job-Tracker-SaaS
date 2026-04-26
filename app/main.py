@@ -2,6 +2,8 @@
 # It defines the API endpoints for creating, retrieving, updating, and deleting job records. 
 # The application uses SQLAlchemy for database interactions and Pydantic for data validation.
 
+import os
+
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from fastapi import FastAPI, Depends, HTTPException
@@ -13,9 +15,17 @@ from app.models import Job_schema
 #triggering FASTAPI
 app = FastAPI()
 
+
+def get_allowed_origins() -> list[str]:
+    configured = os.getenv("CORS_ORIGINS", "")
+    if configured.strip():
+        return [origin.strip() for origin in configured.split(",") if origin.strip()]
+
+    return ["http://localhost:3000", "http://127.0.0.1:3000"]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=get_allowed_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
