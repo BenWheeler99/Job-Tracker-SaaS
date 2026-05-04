@@ -14,6 +14,8 @@ class Job(BaseModel):
     company: str = None
     state: Literal["Applied", "Rejected", "Offered"]
     offer: Optional[bool] = None
+    notes: Optional[str] = None
+    date_applied: Optional[str] = None
 
 
     

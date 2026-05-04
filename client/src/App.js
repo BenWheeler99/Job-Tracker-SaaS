@@ -8,6 +8,8 @@ const INITIAL_FORM = {
   company: '',
   state: 'Applied',
   offer: false,
+  notes: '',
+  date_applied: '',
 };
 
 function App() {
@@ -67,6 +69,8 @@ function App() {
       company: form.company.trim() || null,
       state: form.state,
       offer: form.offer,
+      notes: form.notes.trim() || null,
+      date_applied: form.date_applied || null,
     };
 
     const isEditing = editingId !== null;
@@ -107,6 +111,8 @@ function App() {
       company: job.company || '',
       state: job.state || 'Applied',
       offer: Boolean(job.offer),
+      notes: job.notes || '',
+      date_applied: job.date_applied || '',
     });
     setSuccessMessage('');
     setError('');
@@ -190,6 +196,25 @@ function App() {
               Offer received
             </label>
 
+            <label htmlFor="notes">Notes</label>
+            <textarea
+              id="notes"
+              name="notes"
+              value={form.notes}
+              onChange={handleChange}
+              placeholder="Add any notes about this job..."
+              rows="4"
+            />
+
+            <label htmlFor="date_applied">Date Applied</label>
+            <input
+              id="date_applied"
+              name="date_applied"
+              type="date"
+              value={form.date_applied}
+              onChange={handleChange}
+            />
+
             <div className="form-actions">
               <button type="submit" disabled={submitting}>
                 {submitting ? 'Saving...' : editingId ? 'Update Job' : 'Create Job'}
@@ -229,6 +254,8 @@ function App() {
                       <strong>Status:</strong> {job.state} | <strong>Offer:</strong>{' '}
                       {job.offer ? 'Yes' : 'No'}
                     </p>
+                    {job.date_applied && <p><strong>Date Applied:</strong> {job.date_applied}</p>}
+                    {job.notes && <p><strong>Notes:</strong> {job.notes}</p>}
                   </div>
                   <div className="job-actions">
                     <button type="button" className="secondary" onClick={() => handleEdit(job)}>

@@ -13,5 +13,6 @@ class Job_schema(Base):
     company: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
     state: Mapped[Optional[str]]
     offer: Mapped[bool] = mapped_column(Boolean, default=True)
-    
+    notes: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    date_applied: Mapped[Optional[str]] = mapped_column(String(30), nullable=True)
     
