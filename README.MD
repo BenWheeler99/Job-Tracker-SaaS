@@ -94,7 +94,7 @@ Job table fields:
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | POST | `/job/` | Create a job |
-| GET | `/jobs` | List jobs |
+| GET | `/jobs` | List jobs, or filter with `?search=term` |
 | GET | `/jobs/{job_id}` | Get one job |
 | PUT | `/jobs/{job_id}` | Update job |
 | DELETE | `/jobs/{job_id}` | Delete job |
@@ -113,6 +113,12 @@ List:
 
 ```bash
 curl "http://127.0.0.1:8001/jobs"
+```
+
+Search:
+
+```bash
+curl "http://127.0.0.1:8001/jobs?search=acme"
 ```
 
 Update:

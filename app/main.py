@@ -2,7 +2,7 @@
 # It defines the API endpoints for creating, retrieving, updating, and deleting job records. 
 # The application uses SQLAlchemy for database interactions and Pydantic for data validation.
 
-from sqlalchemy import select
+from sqlalchemy import or_, select
 from sqlalchemy.orm import Session
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -41,10 +41,23 @@ def create_job(job: Job, db: Session = Depends(get_session)):
 
 # This grabs everything in the jobs list and returns it to the webpage
 @app.get("/jobs")
-def get_jobs(db: Session = Depends(get_session)):
+def get_jobs(search: str = "", db: Session = Depends(get_session)):
     # This line is using SQLAlchemy's select function to query all records from the Job_schema table. 
     # The result is then processed to return a list of all job records.
-    result = db.execute(select(Job_schema))
+    query = select(Job_schema)
+
+    if search.strip():
+        term = f"%{search.strip()}%"
+        query = query.where(
+            or_(
+                Job_schema.name.ilike(term),
+                Job_schema.company.ilike(term),
+                Job_schema.state.ilike(term),
+                Job_schema.notes.ilike(term),
+            )
+        )
+
+    result = db.execute(query)
     return result.scalars().all()
 
 # This grabs the job by job_id

@@ -16,6 +16,7 @@ function App() {
   const [jobs, setJobs] = useState([]);
   const [form, setForm] = useState(INITIAL_FORM);
   const [editingId, setEditingId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -26,11 +27,12 @@ function App() {
     setEditingId(null);
   };
 
-  const fetchJobs = async () => {
+  const fetchJobs = async (search = searchTerm) => {
     setLoading(true);
     setError('');
     try {
-      const response = await fetch(`${API_BASE_URL}/jobs`);
+      const queryString = search.trim() ? `?search=${encodeURIComponent(search.trim())}` : '';
+      const response = await fetch(`${API_BASE_URL}/jobs${queryString}`);
       if (!response.ok) {
         throw new Error('Failed to load jobs.');
       }
@@ -136,7 +138,7 @@ function App() {
         throw new Error('Failed to delete job.');
       }
 
-      setJobs((current) => current.filter((job) => job.id !== jobId));
+      await fetchJobs();
 
       if (editingId === jobId) {
         resetForm();
@@ -146,6 +148,16 @@ function App() {
     } catch (deleteError) {
       setError(deleteError.message || 'Delete request failed.');
     }
+  };
+
+  const handleSearchSubmit = async (event) => {
+    event.preventDefault();
+    await fetchJobs(searchTerm);
+  };
+
+  const handleSearchClear = async () => {
+    setSearchTerm('');
+    await fetchJobs('');
   };
 
   return (
@@ -236,6 +248,23 @@ function App() {
             </button>
           </div>
 
+          <form className="search-bar" onSubmit={handleSearchSubmit}>
+            <label htmlFor="job-search">Search jobs</label>
+            <div className="search-controls">
+              <input
+                id="job-search"
+                type="search"
+                value={searchTerm}
+                onChange={(event) => setSearchTerm(event.target.value)}
+                placeholder="Search title, company, state, or notes"
+              />
+              <button type="submit">Search</button>
+              <button type="button" className="secondary" onClick={handleSearchClear}>
+                Clear
+              </button>
+            </div>
+          </form>
+
           {error && <p className="status error">{error}</p>}
           {successMessage && <p className="status success">{successMessage}</p>}
 
@@ -244,6 +273,10 @@ function App() {
           {!loading && jobs.length === 0 ? (
             <p>No jobs yet. Create your first one.</p>
           ) : (
+
+            
+
+
             <ul className="job-list">
               {jobs.map((job) => (
                 <li key={job.id} className="job-item">

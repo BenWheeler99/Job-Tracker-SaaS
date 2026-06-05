@@ -18,4 +18,6 @@ class Job(BaseModel):
     date_applied: Optional[str] = None
 
 
-    
+# first pydantic would run any pre-processing and validation on the input data, ensuring that it adheres to the defined schema.
+# Then, it would convert the validated data into a format that can be easily used by the application, such as a dictionary or an instance of the Job class. 
+# Finally, it would return the processed data, which can be used for further operations like database interactions or API responses.
