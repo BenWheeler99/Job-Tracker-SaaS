@@ -243,7 +243,7 @@ function App() {
         <section className="panel list-panel">
           <div className="list-header">
             <h2>Jobs</h2>
-            <button type="button" className="secondary" onClick={fetchJobs} disabled={loading}>
+            <button type="button" className="secondary" onClick={() => fetchJobs()} disabled={loading}>
               Refresh
             </button>
           </div>
